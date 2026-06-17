@@ -1,0 +1,1257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EA Risk Assessment — Structured Uncertainty Framework</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,700&family=Public+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --paper: #f6f1e8;
+  --paper-shade: #ede5d4;
+  --ink: #1a1410;
+  --ink-soft: #4a3d33;
+  --rule: #c9bea9;
+  --rule-soft: #ddd2bc;
+  --teal: #1e4d5c;
+  --teal-deep: #133744;
+  --burgundy: #8b1e3f;
+  --amber: #b8722a;
+  --olive: #5e6b3b;
+  --highlight: #f0e4c8;
+  --warn-bg: #fbecd9;
+  --warn-border: #d4a373;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: 'Public Sans', -apple-system, sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 48px 60px 80px;
+  position: relative;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    radial-gradient(circle at 10% 8%, rgba(184, 114, 42, 0.04) 0%, transparent 30%),
+    radial-gradient(circle at 90% 90%, rgba(30, 77, 92, 0.03) 0%, transparent 35%);
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* ---------- HEADER ---------- */
+header {
+  border-bottom: 1px solid var(--rule);
+  padding-bottom: 36px;
+  margin-bottom: 48px;
+  position: relative;
+}
+
+.kicker {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--ink-soft);
+  margin-bottom: 18px;
+}
+
+h1 {
+  font-family: 'Fraunces', serif;
+  font-weight: 400;
+  font-size: 52px;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  margin-bottom: 20px;
+  font-variation-settings: 'opsz' 96, 'SOFT' 30;
+}
+
+h1 em {
+  font-style: italic;
+  font-weight: 300;
+  color: var(--teal-deep);
+}
+
+.subtitle {
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-weight: 300;
+  font-size: 21px;
+  line-height: 1.45;
+  color: var(--ink-soft);
+  max-width: 720px;
+  margin-bottom: 28px;
+}
+
+.attribution {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px;
+  color: var(--ink-soft);
+  letter-spacing: 0.04em;
+}
+
+.disclaimer {
+  background: var(--warn-bg);
+  border-left: 3px solid var(--warn-border);
+  padding: 18px 22px;
+  margin-top: 28px;
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--ink);
+}
+
+.disclaimer strong {
+  font-weight: 600;
+  color: var(--burgundy);
+}
+
+/* ---------- LAYOUT ---------- */
+.layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 64px;
+  align-items: start;
+}
+
+@media (max-width: 980px) {
+  body { padding: 32px 24px 60px; }
+  h1 { font-size: 38px; }
+  .layout { grid-template-columns: 1fr; gap: 40px; }
+}
+
+/* ---------- FORM ---------- */
+.form-column h2,
+.output-column h2 {
+  font-family: 'Fraunces', serif;
+  font-weight: 500;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: var(--teal-deep);
+  margin-bottom: 6px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--ink);
+}
+
+.section-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+  color: var(--amber);
+  margin-top: 36px;
+  margin-bottom: 16px;
+  padding-bottom: 8px;
+  border-bottom: 1px dashed var(--rule);
+}
+
+.section-label:first-of-type { margin-top: 24px; }
+
+.question {
+  margin-bottom: 28px;
+}
+
+.q-label {
+  font-family: 'Fraunces', serif;
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 1.35;
+  color: var(--ink);
+  margin-bottom: 4px;
+  display: flex;
+  gap: 10px;
+  align-items: baseline;
+}
+
+.q-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--amber);
+  letter-spacing: 0.04em;
+  flex-shrink: 0;
+}
+
+.q-hint {
+  font-size: 13px;
+  color: var(--ink-soft);
+  font-style: italic;
+  margin-bottom: 10px;
+  margin-left: 32px;
+  line-height: 1.45;
+}
+
+.options {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-left: 32px;
+}
+
+.opt {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 10px 14px;
+  border: 1px solid var(--rule-soft);
+  background: rgba(255, 255, 255, 0.4);
+  border-radius: 2px;
+  cursor: pointer;
+  transition: all 0.15s;
+  position: relative;
+}
+
+.opt:hover {
+  border-color: var(--teal);
+  background: rgba(255, 255, 255, 0.7);
+}
+
+.opt input {
+  position: absolute;
+  opacity: 0;
+}
+
+.opt-marker {
+  width: 14px;
+  height: 14px;
+  border: 1.5px solid var(--ink-soft);
+  border-radius: 50%;
+  flex-shrink: 0;
+  margin-top: 4px;
+  position: relative;
+  transition: all 0.15s;
+}
+
+.opt input:checked + .opt-marker {
+  border-color: var(--teal);
+}
+
+.opt input:checked + .opt-marker::after {
+  content: '';
+  position: absolute;
+  inset: 2px;
+  background: var(--teal);
+  border-radius: 50%;
+}
+
+.opt input:checked ~ .opt-content .opt-label {
+  color: var(--teal-deep);
+  font-weight: 500;
+}
+
+.opt:has(input:checked) {
+  border-color: var(--teal);
+  background: var(--highlight);
+}
+
+.opt-content { flex: 1; }
+
+.opt-label {
+  font-size: 14.5px;
+  color: var(--ink);
+  line-height: 1.4;
+  transition: all 0.15s;
+}
+
+.opt-param {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: var(--ink-soft);
+  letter-spacing: 0.02em;
+  margin-top: 3px;
+  opacity: 0.7;
+}
+
+/* ---------- OUTPUT ---------- */
+.output-column {
+  position: sticky;
+  top: 32px;
+}
+
+@media (max-width: 980px) {
+  .output-column { position: static; }
+}
+
+.card {
+  background: #fdfbf6;
+  border: 1px solid var(--ink);
+  padding: 36px 32px;
+  box-shadow:
+    0 1px 0 var(--ink),
+    4px 4px 0 var(--paper-shade),
+    5px 5px 0 var(--ink);
+}
+
+.card-header {
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-weight: 300;
+  font-size: 14px;
+  color: var(--ink-soft);
+  text-align: center;
+  margin-bottom: 4px;
+}
+
+.card-title {
+  font-family: 'Fraunces', serif;
+  font-weight: 400;
+  font-size: 28px;
+  text-align: center;
+  color: var(--ink);
+  letter-spacing: -0.01em;
+  margin-bottom: 24px;
+}
+
+.card-conditional {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--burgundy);
+  text-align: center;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--rule);
+  margin-bottom: 24px;
+}
+
+.metric-block {
+  margin-bottom: 28px;
+}
+
+.metric-header {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: var(--teal-deep);
+  margin-bottom: 14px;
+  padding-bottom: 6px;
+  border-bottom: 1px dashed var(--rule);
+}
+
+.metric-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 16px;
+  align-items: baseline;
+  padding: 6px 0;
+  font-size: 14px;
+}
+
+.metric-row + .metric-row {
+  border-top: 1px dotted var(--rule-soft);
+}
+
+.metric-row.primary {
+  background: linear-gradient(to right, rgba(184, 114, 42, 0.08), transparent);
+  margin: 4px -8px;
+  padding: 8px;
+  border-radius: 2px;
+  border: none;
+}
+
+.metric-label {
+  color: var(--ink-soft);
+  font-size: 13px;
+}
+
+.metric-value {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 500;
+  font-size: 15px;
+  color: var(--ink);
+  text-align: right;
+  letter-spacing: -0.02em;
+}
+
+.metric-row.primary .metric-value {
+  color: var(--burgundy);
+  font-weight: 600;
+  font-size: 17px;
+}
+
+/* Editable exceedance threshold input, sits inline in the metric label */
+.tau-input {
+  width: 3.6em;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 1px 4px;
+  margin: 0 1px;
+  border: 1px solid var(--amber);
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.75);
+  color: var(--teal-deep);
+  text-align: right;
+  vertical-align: baseline;
+}
+
+.tau-input:focus {
+  outline: none;
+  border-color: var(--teal);
+  background: #fff;
+}
+
+/* Plain-English clarifying caption inside a metric block */
+.metric-note {
+  font-size: 11.5px;
+  line-height: 1.5;
+  color: var(--ink-soft);
+  font-style: italic;
+  margin-top: 12px;
+  padding-top: 9px;
+  border-top: 1px dotted var(--rule-soft);
+}
+
+.metric-note em { font-style: normal; font-weight: 600; }
+
+.range-bar {
+  height: 6px;
+  background: var(--paper-shade);
+  margin: 8px 0 4px;
+  position: relative;
+  border-radius: 1px;
+}
+
+.range-fill {
+  position: absolute;
+  height: 100%;
+  background: linear-gradient(to right, var(--teal), var(--amber), var(--burgundy));
+  opacity: 0.65;
+  border-radius: 1px;
+}
+
+.range-tick {
+  position: absolute;
+  width: 1.5px;
+  height: 14px;
+  background: var(--ink);
+  top: -4px;
+  transform: translateX(-0.75px);
+}
+
+.range-axis {
+  display: flex;
+  justify-content: space-between;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  color: var(--ink-soft);
+  margin-top: 2px;
+}
+
+.robustness {
+  margin-top: 24px;
+  padding: 18px 16px;
+  background: var(--highlight);
+  border-left: 3px solid var(--olive);
+}
+
+.robustness-header {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: var(--olive);
+  margin-bottom: 8px;
+}
+
+.robustness-item {
+  font-size: 13.5px;
+  line-height: 1.5;
+  margin-top: 6px;
+  color: var(--ink);
+}
+
+.robustness-item strong {
+  font-family: 'Fraunces', serif;
+  font-weight: 600;
+  font-size: 13.5px;
+  color: var(--teal-deep);
+}
+
+.annotation {
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--ink-soft);
+  margin-top: 18px;
+  padding-top: 16px;
+  border-top: 1px dotted var(--rule);
+}
+
+.annotation::before {
+  content: '§';
+  margin-right: 8px;
+  color: var(--amber);
+  font-style: normal;
+  font-weight: 500;
+}
+
+/* ---------- SENSITIVITY ---------- */
+.sensitivity {
+  margin-top: 56px;
+  padding-top: 36px;
+  border-top: 2px solid var(--ink);
+}
+
+.sensitivity h2 {
+  font-family: 'Fraunces', serif;
+  font-weight: 400;
+  font-size: 28px;
+  font-style: italic;
+  margin-bottom: 12px;
+}
+
+.sensitivity-intro {
+  font-size: 14px;
+  color: var(--ink-soft);
+  margin-bottom: 28px;
+  max-width: 640px;
+}
+
+.sens-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 18px;
+}
+
+.sens-card {
+  border: 1px solid var(--rule);
+  padding: 18px 20px;
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.sens-q {
+  font-family: 'Fraunces', serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--ink);
+  margin-bottom: 10px;
+}
+
+.sens-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-size: 12px;
+  padding: 4px 0;
+  border-top: 1px dotted var(--rule-soft);
+  font-family: 'IBM Plex Mono', monospace;
+}
+
+.sens-row:first-of-type { border-top: none; }
+
+.sens-row span:first-child {
+  color: var(--ink-soft);
+  flex: 1;
+}
+
+.sens-row .delta {
+  color: var(--ink);
+  font-weight: 500;
+}
+
+.sens-row .delta.up { color: var(--burgundy); }
+.sens-row .delta.down { color: var(--olive); }
+.sens-row.current { background: var(--highlight); padding: 4px 8px; margin: 0 -8px; }
+.sens-row.current span:first-child { color: var(--teal-deep); font-weight: 500; }
+
+/* ---------- FOOTER ---------- */
+footer {
+  margin-top: 80px;
+  padding-top: 32px;
+  border-top: 1px solid var(--rule);
+  font-size: 12px;
+  color: var(--ink-soft);
+  line-height: 1.6;
+  font-family: 'IBM Plex Mono', monospace;
+}
+
+footer p { margin-bottom: 8px; }
+footer a { color: var(--teal); text-decoration: none; border-bottom: 1px dotted var(--teal); }
+
+/* ---------- DECORATION ---------- */
+.ornament {
+  text-align: center;
+  font-family: 'Fraunces', serif;
+  font-size: 18px;
+  color: var(--rule);
+  margin: 36px 0;
+  letter-spacing: 1em;
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="kicker">Companion to: Quantifying Compromise Risk in Exceptional Access Architectures Under Deep Uncertainty</div>
+  <h1>The Risk-Side<br><em>Question Set</em></h1>
+  <p class="subtitle">A structured elicitation tool. Twelve questions over architectural scope, adversary environment, operational controls, deployment, and decision framework — each mapped to a parameter in the underlying model.</p>
+  <div class="disclaimer">
+    The output is a range under the assumptions you specify. Structural findings (architectural ordering, tail-shape direction) do not change with your answers; calibration-conditional magnitudes do. Read the outputs accordingly.
+  </div>
+</header>
+
+<div class="layout">
+  <!-- ============================ FORM ============================ -->
+  <div class="form-column">
+    <h2>Specification</h2>
+
+    <!-- SECTION A -->
+    <div class="section-label">§A · Architectural scope</div>
+
+    <div class="question" data-q="1">
+      <div class="q-label"><span class="q-num">Q1</span><span>Which architectural class is under consideration?</span></div>
+      <p class="q-hint">Selects the structural model and its prior calibrations.</p>
+      <div class="options">
+        <label class="opt"><input type="radio" name="q1" value="TEA" checked><span class="opt-marker"></span><div class="opt-content"><div class="opt-label">Transmission-layer (T-EA)</div><div class="opt-param">carrier infrastructure; co-located 𝒦, 𝒟</div></div></label>
+        <label class="opt"><input type="radio" name="q1" value="OTT"><span class="opt-marker"></span><div class="opt-content"><div class="opt-label">Over-the-top (OTT-EA)</div><div class="opt-param">platform infrastructure; segregated 𝒦, 𝒟</div></div></label>
+        <label class="opt"><input type="radio" name="q1" value="THRESH"><span class="opt-marker"></span><div class="opt-content"><div class="opt-label">Distributed threshold scheme</div><div class="opt-param">illustrative only; per-node rate borrowed from T-EA</div></div></label>
+      </div>
+    </div>
+
+    <div class="question" data-q="2">
+      <div class="q-label"><span class="q-num">Q2</span><span>How many operators host the EA infrastructure?</span></div>
+      <p class="q-hint">Parameterises the concentration modifier δ_concen.</p>
+      <div class="options">
+        <label class="opt"><input type="radio" name="q2" value="single" checked><span class="opt-marker"></span><div class="opt-content"><div class="opt-label">Single major operator (1–2)</div><div class="opt-param">δ_concen ∈ [1.4, 1.8]</div></div></label>
+        <label class="opt"><input type="radio" name="q2" value="few"><span class="opt-marker"></span><div class="opt-content"><div class="opt-label">Few regulated operators (3–10)</div><div class="opt-param">δ_concen ∈ [1.1, 1.4]</div></div></label>
+        <label class="opt"><input type="radio" name="q2" value="many"><span class="opt-marker"></span><div class="opt-content"><div class="opt-label">Many operators (50+)</div><div class="opt-param">δ_concen ∈ [1.0, 1.1]</div></div></label>
+      </div>
+    </div>
+
+    <div class="question" data-q="3">
+      <div class="q-label"><span class="q-num">Q3</span><span>Does the mandate add new infrastructure or modify pre-existing?</span></div>
+      <p class="q-hint">Clarifies the no-EA counterfactual interpretation; affects output annotation.</p>
+      <div class="options">
+        <label class="opt"><input type="radio" name="q3" value="new" checked><span class="opt-marker"></span><div class="opt-content"><div class="opt-label">Adds new infrastructure</div><div class="opt-param">Standard counterfactual</div></div></label>
+        <label class="opt"><input type="radio" name="q3" value="modify"><span class="opt-marker"></span><div class="opt-content"><div class="opt-label">Modifies pre-existing LI infrastructure</div><div class="opt-param">Incremental counterfactual flag</div></div></label>
+        <label class="opt"><input type="radio" name="q3" value="replace"><span class="opt-marker"></span><div class="opt-content"><div class="opt-label">Replaces existing key-recovery scheme</div><div class="opt-param">Substitution counterfactual flag</div></div></label>
+      </div>
+    </div>
+
+    <!-- SECTION B -->
+    <div class="section-label">§B · Adversary environment</div>
+
+    <div class="question" data-q="4">
+      <div class="q-label"><span class="q-num">Q4</span><span>Which adversary tiers are operationally relevant?</span></div>
+      <p class="q-hint">Parameterises the APT mixture weight w^APT.</p>
+      <div class="options">
+        <label class="opt"><input type="radio" name="q4" value="opp"><span class="opt-marker"></span><div class="opt-content"><div class="opt-label">Opportunistic only</div><div class="opt-param">w_APT = 0.10</div></div></label>
+        <label class="opt"><input type="radio" name="q4" value="mixed" checked><span class="opt-marker"></span><div class="opt-content"><div class="opt-label">Mixed (state-aligned + opportunistic)</div><div class="opt-param">w_APT = 0.30 (baseline)</div></div></label>
+        <label class="opt"><input type="radio" name="q4" value="apt"><span class="opt-marker"></span><div class="opt-content"><div class="opt-label">APT-dominated (nation-state)</div><div class="opt-param">w_APT = 0.50</div></div></label>
+      </div>
+    </div>
+
+    <div class="question" data-q="5">
+      <div class="q-label"><span class="q-num">Q5</span><span>Is the operator a known APT-priority target?</span></div>
+      <p class="q-hint">Modulates targeting premium within the [3×, 15×] range.</p>
+      <div class="options">
+        <label class="opt"><input type="radio" name="q5" value="known"><span class="opt-marker"></span><div class="opt-content"><div class="opt-label">Known APT-priority target</div><div class="opt-param">premium ∈ [9, 15]×</div></div></label>
+        <label class="opt"><input type="radio" name="q5" value="contested" checked><span class="opt-marker"></span><div class="opt-content"><div class="opt-label">Contested / partially targeted</div><div class="opt-param">premium ∈ [5, 9]×</div></div></label>
+        <label class="opt"><input type="radio" name="q5" value="low"><span class="opt-marker"></span><div class="opt-content"><div class="opt-label">Not on identified APT target list</div><div class="opt-param">premium ∈ [3, 5]×</div></div></label>
+      </div>
+    </div>
+
+    <!-- SECTION C -->
+    <div class="section-label">§C · Operational controls</div>
+
+    <div class="question" data-q="6">
+      <div class="q-label"><span class="q-num">Q6</span><span>Are HSMs mandated with prescriptive audit?</span></div>
+      <p class="q-hint">Parameterises δ_EA and the zero-day channel rate.</p>
+      <div class="options">
+        <label class="opt"><input type="radio" name="q6" value="mandated"><span class="opt-marker"></span><div class="opt-content"><div class="opt-label">Mandated and audited (FIPS 140-3 L3+)</div><div class="opt-param">δ_EA ∈ [1.0, 1.2]; P_zeroday = 0.010</div></div></label>
+        <label class="opt"><input type="radio" name="q6" value="partial" checked><span class="opt-marker"></span><div class="opt-content"><div class="opt-label">Partial (HSMs deployed, no audit)</div><div class="opt-param">δ_EA ∈ [1.2, 1.5]; P_zeroday = 0.015</div></div></label>
+        <label class="opt"><input type="radio" name="q6" value="discretionary"><span class="opt-marker"></span><div class="opt-content"><div class="opt-label">Not mandated (operator discretion)</div><div class="opt-param">δ_EA ∈ [1.5, 2.0]; P_zeroday = 0.025</div></div></label>
+      </div>
+    </div>
+
+    <div class="question" data-q="7">
+      <div class="q-label"><span class="q-num">Q7</span><span>Are operational procedures prescribed or discretionary?</span></div>
+      <p class="q-hint">Parameterises the operational-error channel rate P_ops.</p>
+      <div class="options">
+        <label class="opt"><input type="radio" name="q7" value="prescribed"><span class="opt-marker"></span><div class="opt-content"><div class="opt-label">Prescribed and audited</div><div class="opt-param">P_ops = 0.005</div></div></label>
+        <label class="opt"><input type="radio" name="q7" value="hybrid" checked><span class="opt-marker"></span><div class="opt-content"><div class="opt-label">Hybrid (some prescription, some discretion)</div><div class="opt-param">P_ops = 0.010 (baseline)</div></div></label>
+        <label class="opt"><input type="radio" name="q7" value="discretionary"><span class="opt-marker"></span><div class="opt-content"><div class="opt-label">Operator self-defines</div><div class="opt-param">P_ops = 0.020</div></div></label>
+      </div>
+    </div>
+
+    <div class="question" data-q="8">
+      <div class="q-label"><span class="q-num">Q8</span><span>Is key custody compartmentalised or unified?</span></div>
+      <p class="q-hint">Parameterises δ_concen adjustment and γ_X/γ.</p>
+      <div class="options">
+        <label class="opt"><input type="radio" name="q8" value="distributed"><span class="opt-marker"></span><div class="opt-content"><div class="opt-label">Distributed (per-jurisdiction keys)</div><div class="opt-param">γ_X/γ ∈ [1.0, 1.5]; δ_concen × 0.8</div></div></label>
+        <label class="opt"><input type="radio" name="q8" value="partial" checked><span class="opt-marker"></span><div class="opt-content"><div class="opt-label">Partial (regional compartments)</div><div class="opt-param">γ_X/γ ∈ [1.5, 2.5] (baseline)</div></div></label>
+        <label class="opt"><input type="radio" name="q8" value="unified"><span class="opt-marker"></span><div class="opt-content"><div class="opt-label">Unified custody (global key store)</div><div class="opt-param">γ_X/γ ∈ [2.5, 4.0]; δ_concen × 1.2</div></div></label>
+      </div>
+    </div>
+
+    <!-- SECTION D -->
+    <div class="section-label">§D · Forward secrecy</div>
+
+    <div class="question" data-q="9">
+      <div class="q-label"><span class="q-num">Q9</span><span>Does the architecture preserve forward secrecy?</span></div>
+      <p class="q-hint">Consequence-side flag; affects output interpretation, not the probability model.</p>
+      <div class="options">
+        <label class="opt"><input type="radio" name="q9" value="preserved" checked><span class="opt-marker"></span><div class="opt-content"><div class="opt-label">Preserved</div><div class="opt-param">Standard reporting</div></div></label>
+        <label class="opt"><input type="radio" name="q9" value="weakened"><span class="opt-marker"></span><div class="opt-content"><div class="opt-label">Weakened (limited retro-decryption)</div><div class="opt-param">~1.3× consequence multiplier flag</div></div></label>
+        <label class="opt"><input type="radio" name="q9" value="broken"><span class="opt-marker"></span><div class="opt-content"><div class="opt-label">Broken (full retrospective decryption)</div><div class="opt-param">Probabilities reported as lower bounds</div></div></label>
+      </div>
+    </div>
+
+    <!-- SECTION E -->
+    <div class="section-label">§E · Deployment horizon &amp; decision framework</div>
+
+    <div class="question" data-q="10">
+      <div class="q-label"><span class="q-num">Q10</span><span>What is the deployment horizon?</span></div>
+      <p class="q-hint">Parameterises T in cumulative projections.</p>
+      <div class="options">
+        <label class="opt"><input type="radio" name="q10" value="5"><span class="opt-marker"></span><div class="opt-content"><div class="opt-label">Short-term (5 years)</div><div class="opt-param">T = 5</div></div></label>
+        <label class="opt"><input type="radio" name="q10" value="10" checked><span class="opt-marker"></span><div class="opt-content"><div class="opt-label">Medium-term (10 years)</div><div class="opt-param">T = 10</div></div></label>
+        <label class="opt"><input type="radio" name="q10" value="25"><span class="opt-marker"></span><div class="opt-content"><div class="opt-label">Long-term (25 years)</div><div class="opt-param">T = 25</div></div></label>
+        <label class="opt"><input type="radio" name="q10" value="open"><span class="opt-marker"></span><div class="opt-content"><div class="opt-label">Open-ended</div><div class="opt-param">T = 25 with stationarity flag</div></div></label>
+      </div>
+    </div>
+
+    <div class="question" data-q="11">
+      <div class="q-label"><span class="q-num">Q11</span><span>Is the mandate subject to periodic reassessment?</span></div>
+      <p class="q-hint">Modulates stationarity caveat strength.</p>
+      <div class="options">
+        <label class="opt"><input type="radio" name="q11" value="sunset"><span class="opt-marker"></span><div class="opt-content"><div class="opt-label">Mandatory sunset with reassessment</div><div class="opt-param">Stationarity caveat softened</div></div></label>
+        <label class="opt"><input type="radio" name="q11" value="periodic" checked><span class="opt-marker"></span><div class="opt-content"><div class="opt-label">Periodic review without sunset</div><div class="opt-param">Stationarity caveat baseline</div></div></label>
+        <label class="opt"><input type="radio" name="q11" value="indefinite"><span class="opt-marker"></span><div class="opt-content"><div class="opt-label">Indefinite mandate</div><div class="opt-param">Stationarity caveat strengthened</div></div></label>
+      </div>
+    </div>
+
+    <div class="question" data-q="12">
+      <div class="q-label"><span class="q-num">Q12</span><span>Under which decision framework are outputs weighted?</span></div>
+      <p class="q-hint">Selects which output is foregrounded in the risk profile card.</p>
+      <div class="options">
+        <label class="opt"><input type="radio" name="q12" value="neutral"><span class="opt-marker"></span><div class="opt-content"><div class="opt-label">Risk-neutral (expectation-based)</div><div class="opt-param">Central tendency foregrounded</div></div></label>
+        <label class="opt"><input type="radio" name="q12" value="averse"><span class="opt-marker"></span><div class="opt-content"><div class="opt-label">Risk-averse (CVaR, maximin)</div><div class="opt-param">Tail figures foregrounded</div></div></label>
+        <label class="opt"><input type="radio" name="q12" value="hybrid" checked><span class="opt-marker"></span><div class="opt-content"><div class="opt-label">Hybrid / no commitment</div><div class="opt-param">Both shown with equal weight</div></div></label>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ============================ OUTPUT ============================ -->
+  <div class="output-column">
+    <h2>Output</h2>
+    <div class="card" id="output-card">
+      <p class="card-header">Conditional Risk Profile</p>
+      <p class="card-title" id="card-class-name">T-EA, single carrier</p>
+      <p class="card-conditional">Conditional on specified assumptions · Not a forecast</p>
+
+      <!-- Annual -->
+      <div class="metric-block">
+        <div class="metric-header">Annual compromise probability</div>
+        <div class="metric-row primary" id="annual-primary-row">
+          <span class="metric-label" id="annual-primary-label">Fréchet–Hoeffding interval</span>
+          <span class="metric-value" id="annual-primary-value">[2.2%, 7.5%]</span>
+        </div>
+        <div class="metric-row">
+          <span class="metric-label">Bayesian central tendency</span>
+          <span class="metric-value" id="annual-central">4.0%</span>
+        </div>
+        <div class="metric-row">
+          <span class="metric-label">Bayesian 90% prior predictive interval</span>
+          <span class="metric-value" id="annual-ci">[1.4%, 12.9%]</span>
+        </div>
+        <div class="range-bar" id="annual-bar">
+          <div class="range-fill" id="annual-fill"></div>
+          <div class="range-tick" id="annual-median-tick"></div>
+        </div>
+        <div class="range-axis"><span>0%</span><span>10%</span><span>20%</span><span>30%</span></div>
+      </div>
+
+      <!-- Cumulative -->
+      <div class="metric-block">
+        <div class="metric-header" id="cumulative-header">10-year cumulative probability</div>
+        <div class="metric-row primary">
+          <span class="metric-label">Fréchet–Hoeffding interval</span>
+          <span class="metric-value" id="cum-fh">[19.9%, 54.2%]</span>
+        </div>
+        <div class="metric-row">
+          <span class="metric-label">Bayesian central tendency</span>
+          <span class="metric-value" id="cum-central">36.6%</span>
+        </div>
+        <div class="metric-row">
+          <span class="metric-label">Bayesian 90% prior predictive interval</span>
+          <span class="metric-value" id="cum-ci">[15.0%, 83.8%]</span>
+        </div>
+      </div>
+
+      <!-- Tail -->
+      <div class="metric-block">
+        <div class="metric-header">Tail-risk indicators</div>
+        <div class="metric-row">
+          <span class="metric-label">Annual 99th percentile</span>
+          <span class="metric-value" id="tail-99">35.2%</span>
+        </div>
+        <div class="metric-row" title="The model's probability that the true annual compromise rate is above the chosen threshold — not the probability that a compromise occurs.">
+          <span class="metric-label">Probability the annual compromise rate exceeds <input type="number" id="tau-input" class="tau-input" value="1.0" min="0.1" max="20" step="0.1" aria-label="annual compromise rate threshold, percent">%</span>
+          <span class="metric-value" id="exceed-val">0.99</span>
+        </div>
+        <div class="metric-row">
+          <span class="metric-label">GPD tail-shape ξ</span>
+          <span class="metric-value" id="gpd-xi">0.27 (95% CI 0.19–0.36)</span>
+        </div>
+        <p class="metric-note">The probability shown for the chosen threshold reflects
+        uncertainty in the model's estimate: it is the chance the true annual
+        compromise <em>rate</em> is above that level &mdash; not the chance that a
+        compromise occurs.</p>
+      </div>
+
+      <!-- Robustness -->
+      <div class="robustness">
+        <div class="robustness-header">Robustness signals</div>
+        <div class="robustness-item"><strong>Structural:</strong> EA-equipped architecture carries higher risk than the no-EA counterfactual within this class. This finding is invariant under your answers, conditional on δ ≥ 1.</div>
+        <div class="robustness-item"><strong>Cross-architectural:</strong> <span id="cross-arch-claim">T-EA exceeds OTT-EA at the median; OTT-EA can exceed T-EA in the upper tail under correlated campaigns.</span></div>
+        <div class="robustness-item"><strong>Calibration-conditional:</strong> The specific magnitudes above reflect the parameter ranges implied by your answers. The ranges shown integrate over the defensible prior calibration sweep.</div>
+      </div>
+
+      <!-- Annotations -->
+      <div id="annotation-block"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================ SENSITIVITY ============================ -->
+<div class="sensitivity">
+  <h2>Sensitivity</h2>
+  <p class="sensitivity-intro">How the FH upper bound and Bayesian 95th percentile of the annual compromise rate respond when individual answers are toggled, holding all others fixed at your current specification.</p>
+  <div class="sens-grid" id="sens-grid"></div>
+</div>
+
+<footer>
+  <p>Quantitative outputs are calibrated to the framework's headline values; this tool is a structured interpolation of the underlying model, not a re-derivation. Structural findings (architectural ordering, tail-shape direction) are invariant under the answer set; calibration-conditional magnitudes scale with the modifier aggregate.</p>
+  <p class="cite">Companion to the paper <em>Quantifying Compromise Risk in Exceptional Access Architectures Under Sparse and Indirect Evidence</em> (A. Woodward, Surrey Centre for Cyber Security). Preprint: arXiv (cs.CR). Code, data, and this tool are available at <a href="https://github.com/profwoodward/EA-Risk-Model-Tool">github.com/profwoodward/EA-Risk-Model-Tool</a>. All computation runs in the browser; nothing leaves this page.</p>
+</footer>
+
+<script>
+/* ============================================================
+   PARAMETER MAPPING & SIMULATION
+   ============================================================ */
+
+// Question → parameter mapping (calibrated to paper headline values)
+const PARAM_MAP = {
+  q1: {
+    TEA:    { class: 'TEA',   baseFH: [2.2, 7.5],   baseMed: 4.0,  baseCI: [1.4, 12.9],  baseCum10: [19.9, 54.2], baseCum10Med: 36.6, baseCum10CI: [15.0, 83.8], tail99: 35.2, gpdXi: 0.27, gpdXiCI: [0.19, 0.36], exceedCurve: [[0.5,1.0],[1.0,0.989],[2.0,0.845],[5.0,0.393],[10.0,0.135]] },
+    OTT:    { class: 'OTT',   baseFH: [1.1, 4.0],   baseMed: 2.6,  baseCI: [0.8, 17.4],  baseCum10: [10.5, 33.5], baseCum10Med: 31.9, baseCum10CI: [10.9, 93.9], tail99: 58.9, gpdXi: 0.52, gpdXiCI: [0.42, 0.61], exceedCurve: [[0.5,0.995],[1.0,0.906],[2.0,0.628],[5.0,0.250],[10.0,0.105]] },
+    THRESH: { class: 'THRESH',baseFH: [0.003, 1.0], baseMed: 0.5,  baseCI: [0.003, 1.0], baseCum10: [0.03, 9.6],  baseCum10Med: 4.9,  baseCum10CI: [0.03, 9.6],  tail99: 2.1,  gpdXi: null, gpdXiCI: null,         exceedCurve: [] }
+  },
+  q2: { single: 1.6, few: 1.25, many: 1.05 },
+  q3: { new: 'new', modify: 'modify', replace: 'replace' },
+  q4: { opp: 0.55, mixed: 1.00, apt: 1.45 },
+  q5: { known: 1.7, contested: 1.00, low: 0.55 },
+  q6: { mandated: 0.78, partial: 1.00, discretionary: 1.45 },
+  q7: { prescribed: 0.85, hybrid: 1.00, discretionary: 1.30 },
+  q8: { distributed: 0.72, partial: 1.00, unified: 1.40 },
+  q9: { preserved: 'preserved', weakened: 'weakened', broken: 'broken' },
+  q10: { '5': 5, '10': 10, '25': 25, open: 25 },
+  q11: { sunset: 'sunset', periodic: 'periodic', indefinite: 'indefinite' },
+  q12: { neutral: 'neutral', averse: 'averse', hybrid: 'hybrid' }
+};
+
+const CLASS_LABEL = {
+  TEA: 'T-EA',
+  OTT: 'OTT-EA',
+  THRESH: 'Threshold (illustrative)'
+};
+
+function getAnswers() {
+  const a = {};
+  for (let i = 1; i <= 12; i++) {
+    const el = document.querySelector(`input[name="q${i}"]:checked`);
+    a[`q${i}`] = el ? el.value : null;
+  }
+  return a;
+}
+
+/* Multiplicative aggregate modifier — calibrated so that
+   "default" answer set produces 1.0× (paper headline values). */
+function aggregateModifier(a) {
+  // δ_EA × δ_concen × premium × ops/zeroday × cross-cutting
+  const mConcen   = PARAM_MAP.q2[a.q2]  / PARAM_MAP.q2.single;     // default 1.0
+  const mAdv      = PARAM_MAP.q4[a.q4]  / PARAM_MAP.q4.mixed;       // default 1.0
+  const mPremium  = PARAM_MAP.q5[a.q5]  / PARAM_MAP.q5.contested;   // default 1.0
+  const mEA       = PARAM_MAP.q6[a.q6]  / PARAM_MAP.q6.partial;     // default 1.0
+  const mOps      = PARAM_MAP.q7[a.q7]  / PARAM_MAP.q7.hybrid;      // default 1.0
+  const mCustody  = PARAM_MAP.q8[a.q8]  / PARAM_MAP.q8.partial;     // default 1.0
+  return mConcen * mAdv * mPremium * mEA * mOps * mCustody;
+}
+
+/* Tail-stretch modifier — only the upper tail shifts strongly with custody/adversary;
+   median tracks the aggregate. */
+function tailModifier(a) {
+  const mAdv      = PARAM_MAP.q4[a.q4]  / PARAM_MAP.q4.mixed;
+  const mCustody  = PARAM_MAP.q8[a.q8]  / PARAM_MAP.q8.partial;
+  // Custody and adversary tier dominate the tail; weight them more.
+  return Math.pow(mAdv * mCustody, 1.3);
+}
+
+/* Cumulative: 1 - (1-q)^T compounding under stationarity. */
+function compound(q, T) {
+  if (q <= 0) return 0;
+  if (q >= 1) return 1;
+  return 1 - Math.pow(1 - q, T);
+}
+
+/* Effective annual rate that reproduces a given 10-year cumulative
+   anchor: solves 1 - (1-q)^10 = cum10 for q. Used so the tool's
+   cumulative outputs reproduce the paper's reported Q10 figures at
+   T = 10 and extrapolate consistently to other horizons. */
+function effRate(cum10pct) {
+  const c = cum10pct / 100;
+  if (c <= 0) return 0;
+  if (c >= 1) return 1;
+  return 1 - Math.pow(1 - c, 0.1);
+}
+
+/* Pr(annual risk > tau) by linear interpolation of the exceedance
+   anchor curve (anchors are [threshold%, probability], ascending in
+   threshold, non-increasing in probability). Clamps below the first
+   anchor; linearly extrapolates the final segment above the last,
+   bounded to [0, last probability]. */
+function exceedanceAt(anchors, tau) {
+  if (!anchors || anchors.length === 0) return null;
+  if (tau <= anchors[0][0]) return anchors[0][1];
+  const last = anchors[anchors.length - 1];
+  if (tau >= last[0]) {
+    const prev = anchors[anchors.length - 2];
+    const slope = (last[1] - prev[1]) / (last[0] - prev[0]);
+    return Math.max(0, Math.min(last[1], last[1] + slope * (tau - last[0])));
+  }
+  for (let i = 1; i < anchors.length; i++) {
+    if (tau <= anchors[i][0]) {
+      const t0 = anchors[i - 1][0], p0 = anchors[i - 1][1];
+      const t1 = anchors[i][0],     p1 = anchors[i][1];
+      return p0 + (tau - t0) / (t1 - t0) * (p1 - p0);
+    }
+  }
+  return last[1];
+}
+
+/* Format a number as percentage with appropriate precision.
+   Headline values are reported to one decimal in the paper (e.g. 12.9%,
+   83.8%), so the percentage scale keeps one decimal throughout; values
+   below 1% get more decimals so threshold-scheme rates stay visible. */
+function pct(x, digits) {
+  if (x === null || x === undefined || isNaN(x)) return '—';
+  digits = digits ?? (x < 0.1 ? 3 : (x < 1 ? 2 : 1));
+  return x.toFixed(digits) + '%';
+}
+
+/* Format a 2-element range. */
+function pctRange(r, digits) {
+  return '[' + pct(r[0], digits) + ', ' + pct(r[1], digits) + ']';
+}
+
+/* Compute risk profile from answers. */
+function computeProfile(a) {
+  const base = PARAM_MAP.q1[a.q1];
+  const M = aggregateModifier(a);
+  const Mtail = tailModifier(a);
+  const T = PARAM_MAP.q10[a.q10];
+
+  // Scale FH, Bayesian central, CI by aggregate modifier.
+  // Tail-skewed: CI upper bound and 99th percentile scale by tail modifier.
+  const fhLo = Math.min(95, base.baseFH[0] * M);
+  const fhHi = Math.min(95, base.baseFH[1] * M);
+  const med  = Math.min(95, base.baseMed * M);
+  const ciLo = Math.max(0.001, Math.min(95, base.baseCI[0] * M));
+  const ciHi = Math.min(95, base.baseCI[1] * Mtail);
+
+  // Cumulative — anchored to the paper's reported 10-year figures.
+  // Each cumulative quantity is driven by an effective annual rate
+  // derived from its stored Q10 anchor (baseCum10*), so T = 10
+  // reproduces the paper exactly and T = 5 / 25 are consistent
+  // compounds of the same anchor rather than a re-compounding of the
+  // annual median (which understates the distributional Q10).
+  const cumFHLo = compound(effRate(base.baseCum10[0])   * M,     T) * 100;
+  const cumFHHi = compound(effRate(base.baseCum10[1])   * M,     T) * 100;
+  const cumMed  = compound(effRate(base.baseCum10Med)   * M,     T) * 100;
+  const cumLo   = compound(effRate(base.baseCum10CI[0]) * M,     T) * 100;
+  const cumHi   = compound(effRate(base.baseCum10CI[1]) * Mtail, T) * 100;
+
+  const tail99 = Math.min(99, base.tail99 * Mtail);
+
+  // Exceedance anchor curve for Pr(annual risk > tau). Combines the
+  // paper's computed exceedance points (reproduce_headline.py), with
+  // each point's threshold scaled by the answer-derived modifier, and
+  // the tool's own post-modifier quantiles, so the curve is consistent
+  // with the displayed median / credible interval / 99th percentile
+  // and shifts coherently when the answer set changes.
+  const exAnchors = [[0, 1.0]];
+  (base.exceedCurve || []).forEach(function (pt) {
+    exAnchors.push([pt[0] * (pt[1] >= 0.5 ? M : Mtail), pt[1]]);
+  });
+  exAnchors.push([ciLo, 0.95], [med, 0.50], [ciHi, 0.05], [tail99, 0.01]);
+  exAnchors.sort(function (u, v) { return u[0] - v[0]; });
+  for (let i = 1; i < exAnchors.length; i++) {       // enforce monotone P
+    if (exAnchors[i][1] > exAnchors[i - 1][1]) exAnchors[i][1] = exAnchors[i - 1][1];
+  }
+
+  const gpdXi  = base.gpdXi;    // tail shape is invariant under multiplicative scaling
+
+  return {
+    class: a.q1,
+    classLabel: CLASS_LABEL[a.q1],
+    T: T,
+    fh: [fhLo, fhHi],
+    median: med,
+    ci: [ciLo, ciHi],
+    cumFH: [cumFHLo, cumFHHi],
+    cumMedian: cumMed,
+    cumCI: [cumLo, cumHi],
+    tail99,
+    exceedAnchors: exAnchors,
+    gpdXi,
+    gpdXiCI: base.gpdXiCI,
+    decisionFramework: a.q12,
+    forwardSecrecy: a.q9,
+    counterfactual: a.q3,
+    horizon: a.q10,
+    reassessment: a.q11,
+    modifier: M
+  };
+}
+
+/* Build a one-line class-and-context label for the card title. */
+function buildCardTitle(a) {
+  const cls = CLASS_LABEL[a.q1];
+  const scale = { single: 'single carrier', few: 'few operators', many: 'multi-operator' }[a.q2];
+  return `${cls}, ${scale}`;
+}
+
+/* Build the annotation block based on flag answers. */
+function buildAnnotations(p, a, tau) {
+  const lines = [];
+
+  if (tau !== undefined && (tau < 0.5 || tau > 10)) {
+    lines.push('Exceedance threshold \u03c4 = ' + tau.toFixed(1) +
+      '% lies outside the 0.5\u201310% range the framework computes directly; ' +
+      'the probability that the annual compromise rate exceeds it is interpolated/extrapolated and should be read as indicative.');
+  }
+
+  if (a.q3 === 'modify') {
+    lines.push('Q3 incremental counterfactual: the values above represent the EA-specific increment above the pre-existing LI risk surface, not the absolute risk.');
+  } else if (a.q3 === 'replace') {
+    lines.push('Q3 substitution counterfactual: comparative reading only; the pre-existing scheme is not modelled.');
+  }
+
+  if (a.q9 === 'weakened') {
+    lines.push('Q9 forward secrecy weakened: probabilities above should be read with an additional ~1.3× consequence multiplier for the retrospective-decryption window.');
+  } else if (a.q9 === 'broken') {
+    lines.push('Q9 forward secrecy broken: probabilities above are lower bounds on risk; a complete risk-benefit analysis requires consequence-side modelling not provided here.');
+  }
+
+  if (a.q10 === '25' || a.q10 === 'open') {
+    lines.push('Q10 long horizon: cumulative projections assume stationarity over 25 years. The risk landscape has changed materially over comparable past windows; treat the 25-year cumulative as illustrative.');
+  }
+
+  if (a.q11 === 'indefinite') {
+    lines.push('Q11 indefinite mandate without reassessment compounds the stationarity caveat. Long-run risk should be interpreted as the ceiling rather than the central estimate.');
+  }
+
+  if (a.q1 === 'THRESH') {
+    lines.push('Q1 threshold scheme: per-node rate borrowed from T-EA Pillar III. Outputs are an order-of-magnitude illustration of the architectural-choice effect, not a calibrated projection.');
+  }
+
+  if (p.modifier > 2.5) {
+    lines.push('Aggregate parameter setting is in the upper range of the defensible space. Verify that the combination of answers does not double-count any single mechanism.');
+  } else if (p.modifier < 0.4) {
+    lines.push('Aggregate parameter setting is in the lower range of the defensible space. The structural lower bound (Proposition 1) still applies.');
+  }
+
+  return lines;
+}
+
+/* ============================================================
+   RENDER
+   ============================================================ */
+
+function render() {
+  const a = getAnswers();
+  const p = computeProfile(a);
+
+  // Card title
+  document.getElementById('card-class-name').textContent = buildCardTitle(a);
+
+  // Annual primary row depends on Q12
+  const primaryLabel = document.getElementById('annual-primary-label');
+  const primaryValue = document.getElementById('annual-primary-value');
+  if (a.q12 === 'averse') {
+    primaryLabel.textContent = 'Bayesian 95th percentile';
+    primaryValue.textContent = pct(p.ci[1]);
+  } else if (a.q12 === 'neutral') {
+    primaryLabel.textContent = 'Bayesian central tendency';
+    primaryValue.textContent = pct(p.median);
+  } else {
+    primaryLabel.textContent = 'Fréchet–Hoeffding interval';
+    primaryValue.textContent = pctRange(p.fh);
+  }
+
+  document.getElementById('annual-central').textContent = pct(p.median);
+  document.getElementById('annual-ci').textContent = pctRange(p.ci);
+
+  // Annual range bar (scale to 0-30%)
+  const maxScale = 30;
+  const fhFill = document.getElementById('annual-fill');
+  const fhLeft = Math.max(0, p.fh[0] / maxScale * 100);
+  const fhWidth = Math.min(100 - fhLeft, (p.fh[1] - p.fh[0]) / maxScale * 100);
+  fhFill.style.left = fhLeft + '%';
+  fhFill.style.width = fhWidth + '%';
+  const medTick = document.getElementById('annual-median-tick');
+  medTick.style.left = Math.min(100, p.median / maxScale * 100) + '%';
+
+  // Cumulative header reflects horizon
+  const horizonText = a.q10 === 'open' ? '25-year (open-ended)' : `${a.q10}-year`;
+  document.getElementById('cumulative-header').textContent = `${horizonText} cumulative probability`;
+  document.getElementById('cum-fh').textContent = pctRange(p.cumFH);
+  document.getElementById('cum-central').textContent = pct(p.cumMedian);
+  document.getElementById('cum-ci').textContent = pctRange(p.cumCI);
+
+  // Tail
+  document.getElementById('tail-99').textContent = pct(p.tail99);
+
+  // Variable exceedance threshold tau (default 1%, user-adjustable)
+  const tauEl = document.getElementById('tau-input');
+  let tau = parseFloat(tauEl.value);
+  if (isNaN(tau)) tau = 1.0;
+  tau = Math.min(20, Math.max(0.1, tau));
+  const exVal = exceedanceAt(p.exceedAnchors, tau);
+  document.getElementById('exceed-val').textContent =
+    (exVal === null ? '—' : exVal.toFixed(2));
+  const gpdEl = document.getElementById('gpd-xi');
+  if (p.gpdXi === null || p.gpdXi === undefined) {
+    gpdEl.textContent = 'n/a — bounded binomial tail';
+  } else if (p.gpdXiCI) {
+    gpdEl.textContent = p.gpdXi.toFixed(2) +
+      ' (95% CI ' + p.gpdXiCI[0].toFixed(2) + '–' + p.gpdXiCI[1].toFixed(2) + ')';
+  } else {
+    gpdEl.textContent = p.gpdXi.toFixed(2);
+  }
+
+  // Cross-arch claim depends on class
+  const crossArch = document.getElementById('cross-arch-claim');
+  if (a.q1 === 'TEA') {
+    crossArch.innerHTML = 'T-EA exceeds OTT-EA at the median; OTT-EA can exceed T-EA in the upper tail under correlated campaigns. Consider switching Q1 to compare.';
+  } else if (a.q1 === 'OTT') {
+    crossArch.innerHTML = 'OTT-EA falls below T-EA at the median but exceeds T-EA in the upper tail (95th and 99th percentiles). The architectural divergence is structurally guaranteed by γ_X/γ ≥ 1.';
+  } else {
+    crossArch.innerHTML = 'Threshold schemes break the unitary-operator structure that drives both T-EA and OTT-EA risk. Outputs are illustrative; quantitative analysis requires separate empirical work.';
+  }
+
+  // Annotations
+  const annoBlock = document.getElementById('annotation-block');
+  const lines = buildAnnotations(p, a, tau);
+  if (lines.length === 0) {
+    annoBlock.innerHTML = '';
+  } else {
+    annoBlock.innerHTML = lines.map(l => `<div class="annotation">${l}</div>`).join('');
+  }
+
+  // Sensitivity
+  renderSensitivity(a, p);
+}
+
+/* ============================================================
+   SENSITIVITY PANEL
+   ============================================================ */
+
+const SENS_QUESTIONS = [
+  { id: 'q1', text: 'Q1 · Architecture',           opts: { TEA: 'T-EA', OTT: 'OTT-EA', THRESH: 'Threshold' } },
+  { id: 'q2', text: 'Q2 · Operator concentration', opts: { single: 'Single major', few: 'Few operators', many: 'Many operators' } },
+  { id: 'q4', text: 'Q4 · Adversary mix',          opts: { opp: 'Opportunistic', mixed: 'Mixed', apt: 'APT-dominated' } },
+  { id: 'q5', text: 'Q5 · Targeting status',       opts: { known: 'Known target', contested: 'Contested', low: 'Low priority' } },
+  { id: 'q6', text: 'Q6 · HSM mandate',            opts: { mandated: 'Mandated', partial: 'Partial', discretionary: 'Discretionary' } },
+  { id: 'q8', text: 'Q8 · Key custody',            opts: { distributed: 'Distributed', partial: 'Partial', unified: 'Unified' } }
+];
+
+function renderSensitivity(currentA, currentP) {
+  const grid = document.getElementById('sens-grid');
+  grid.innerHTML = '';
+
+  SENS_QUESTIONS.forEach(q => {
+    const card = document.createElement('div');
+    card.className = 'sens-card';
+
+    const heading = document.createElement('div');
+    heading.className = 'sens-q';
+    heading.textContent = q.text;
+    card.appendChild(heading);
+
+    Object.entries(q.opts).forEach(([val, label]) => {
+      const a = Object.assign({}, currentA);
+      a[q.id] = val;
+      const prof = computeProfile(a);
+      const isCurrent = currentA[q.id] === val;
+      const row = document.createElement('div');
+      row.className = 'sens-row' + (isCurrent ? ' current' : '');
+
+      const txt = document.createElement('span');
+      txt.textContent = label;
+
+      const delta = document.createElement('span');
+      delta.className = 'delta';
+      const fhHi = prof.fh[1];
+      const ciHi = prof.ci[1];
+      delta.textContent = `FH ↑ ${pct(fhHi)} · p95 ${pct(ciHi)}`;
+
+      if (!isCurrent) {
+        if (fhHi > currentP.fh[1] * 1.1) delta.className += ' up';
+        else if (fhHi < currentP.fh[1] * 0.9) delta.className += ' down';
+      }
+
+      row.appendChild(txt);
+      row.appendChild(delta);
+      card.appendChild(row);
+    });
+
+    grid.appendChild(card);
+  });
+}
+
+/* ============================================================
+   INITIALISE
+   ============================================================ */
+
+document.querySelectorAll('input[type="radio"]').forEach(el => {
+  el.addEventListener('change', render);
+});
+
+const tauInput = document.getElementById('tau-input');
+tauInput.addEventListener('input', render);
+tauInput.addEventListener('change', () => {
+  let v = parseFloat(tauInput.value);
+  if (isNaN(v)) v = 1.0;
+  tauInput.value = Math.min(20, Math.max(0.1, v));
+  render();
+});
+
+render();
+</script>
+
+</body>
+</html>
