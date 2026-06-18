@@ -432,6 +432,9 @@ h1 em {
   color: var(--amber);
   margin-top: 3px;
 }
+.tau-dir em { font-style: normal; font-weight: 600; color: var(--ink); }
+.tau-dir .tau-cat { font-weight: 700; color: var(--burgundy); letter-spacing: 0.02em; }
+.tau-dir a { color: var(--teal-deep); font-weight: 600; text-decoration: underline; text-underline-offset: 2px; }
 
 /* Live plain-English reading of the exceedance threshold */
 .tau-gloss {
@@ -446,6 +449,104 @@ h1 em {
 }
 .tau-gloss strong { color: var(--teal-deep); font-weight: 600; }
 .tau-gloss em { font-style: normal; font-weight: 600; color: var(--ink); }
+
+/* Tolerability-context figure */
+.tol-intro {
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--ink-soft);
+  margin: 4px 0 10px;
+}
+.tol-intro em { font-style: normal; font-weight: 600; color: var(--ink); }
+.tol-control {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  font-size: 12px;
+  color: var(--ink-soft);
+  margin-bottom: 8px;
+}
+.tol-control .tau-input { width: 8em; text-align: right; }
+.tol-radio { display: inline-flex; align-items: center; gap: 4px; cursor: pointer; }
+.tol-radio input { accent-color: var(--teal); margin: 0; }
+.tol-readout { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--teal-deep); }
+#tol-svg-wrap { width: 100%; overflow-x: auto; }
+#tol-svg { width: 100%; max-width: 1080px; height: auto; display: block; margin: 0 auto; }
+.tol-svg-axis { stroke: var(--rule); stroke-width: 1.25; }
+.tol-svg-tick { stroke: var(--rule); stroke-width: 1.25; }
+.tol-svg-title { font-family: 'Public Sans', sans-serif; font-size: 17px; font-weight: 700; fill: var(--ink); }
+.tol-svg-ticklabel { font-family: 'IBM Plex Mono', monospace; font-size: 14px; fill: var(--ink-soft); }
+.tol-svg-pct { font-family: 'IBM Plex Mono', monospace; font-size: 12px; fill: var(--ink-soft); opacity: 0.85; }
+.tol-svg-axistitle { font-family: 'Public Sans', sans-serif; font-size: 14px; fill: var(--ink-soft); }
+.tol-svg-reglabel { font-family: 'Public Sans', sans-serif; font-size: 16px; font-weight: 700; letter-spacing: 0.02em; }
+.tol-svg-refline { stroke-width: 1.5; }
+.tol-svg-reflabel { font-family: 'Public Sans', sans-serif; font-size: 12px; fill: var(--ink-soft); }
+.tol-svg-fn { stroke: var(--teal-deep); stroke-width: 1.75; stroke-dasharray: 5 3; }
+.tol-svg-post-band { fill: rgba(139, 30, 63, 0.20); }
+.tol-svg-post-line { stroke: var(--burgundy); stroke-width: 2.25; }
+.tol-svg-post-label { font-family: 'Public Sans', sans-serif; font-size: 15px; font-weight: 700; fill: var(--burgundy); }
+.tol-svg-tau { font-family: 'Public Sans', sans-serif; font-size: 12.5px; font-weight: 600; fill: var(--teal-deep); }
+.tol-legend { display: flex; flex-wrap: wrap; gap: 8px 22px; margin: 12px auto 2px; max-width: 1080px; font-family: 'Public Sans', sans-serif; font-size: 13.5px; color: var(--ink-soft); }
+.tol-legend .tol-chip { display: inline-flex; align-items: center; gap: 7px; line-height: 1.3; }
+.tol-legend .tol-chip i { width: 16px; height: 13px; border-radius: 2px; flex: 0 0 auto; display: inline-block; }
+.tol-legend .tol-chip i.post { background: rgba(139,30,63,0.20); border-left: 3px solid var(--burgundy); border-radius: 0; }
+.tol-legend .tol-chip i.avi { height: 0; border: 0; border-top: 2px dashed #9a8f7a; border-radius: 0; align-self: center; }
+.tol-legend .tol-chip i.tau { height: 0; border: 0; border-top: 2px dotted var(--teal-deep); border-radius: 0; align-self: center; }
+/* Tolerability context pulled out to full page width for legibility */
+.tol-fullwidth { margin: 4px 0 8px; padding-top: 28px; border-top: 1px solid var(--rule-soft); }
+.tol-fullwidth .metric-block { margin-bottom: 0; }
+.tol-fullwidth .tol-intro,
+.tol-fullwidth .metric-note,
+.tol-fullwidth .tol-control,
+.tol-fullwidth .tol-headline { max-width: 860px; }
+.tol-fullwidth .tol-headline { margin-left: 0; }
+@keyframes tolFlash {
+  0%   { box-shadow: 0 0 0 3px rgba(184, 114, 42, 0.55); }
+  100% { box-shadow: 0 0 0 3px rgba(184, 114, 42, 0); }
+}
+.tol-flash { animation: tolFlash 0.9s ease-out; border-radius: 4px; }
+@media (prefers-reduced-motion: reduce) { .tol-flash { animation: none; } }
+.tol-achieved { border-left: 2px solid var(--rule); padding-left: 9px; }
+.tol-achieved strong { color: var(--ink); }
+.tol-headline {
+  font-size: 12.5px;
+  line-height: 1.55;
+  color: var(--ink-soft);
+  margin: 10px 0 4px;
+  padding: 10px 12px;
+  background: rgba(30, 77, 92, 0.06);
+  border-left: 2px solid var(--teal);
+  border-radius: 2px;
+}
+.tol-headline strong { color: var(--teal-deep); font-weight: 700; }
+
+/* Notes & sources */
+.notes {
+  margin-top: 40px;
+  padding-top: 20px;
+  border-top: 1px solid var(--rule);
+}
+.notes h2 {
+  font-family: 'Fraunces', serif;
+  font-size: 17px;
+  font-weight: 500;
+  color: var(--ink);
+  margin-bottom: 12px;
+}
+.note {
+  font-size: 12px;
+  line-height: 1.55;
+  color: var(--ink-soft);
+  margin-bottom: 9px;
+}
+.note strong { color: var(--ink); font-weight: 600; }
+.note sup { color: var(--teal-deep); font-weight: 700; }
+.note em { font-style: italic; }
+sup.note-ref { font-size: 0.7em; line-height: 0; }
+sup.note-ref a { color: var(--teal); text-decoration: none; font-weight: 700; }
+sup.note-ref a:hover { text-decoration: underline; }
+.note:target { background: var(--highlight); border-radius: 2px; padding: 4px 6px; margin-left: -6px; }
 
 .range-bar {
   height: 6px;
@@ -833,7 +934,7 @@ footer a { color: var(--teal); text-decoration: none; border-bottom: 1px dotted 
           <span class="metric-value" id="tail-99">35.2%</span>
         </div>
         <div class="metric-row" title="The model's probability that the true annual compromise rate is above the chosen threshold — not the probability that a compromise occurs.">
-          <span class="metric-label">Probability the true annual compromise rate is at least <input type="number" id="tau-input" class="tau-input" value="1.0" min="0.1" max="20" step="0.1" aria-label="annual compromise rate threshold, percent">%<span class="tau-dir">Raise this % to ask about a worse, rarer state — the probability will fall.</span></span>
+          <span class="metric-label">Probability the true annual compromise rate is at least <input type="number" id="tau-input" class="tau-input" value="1.0" min="0.1" max="20" step="0.1" aria-label="annual compromise rate threshold, percent">%<span class="tau-dir">Every compromise of an EA system is <span class="tau-cat">catastrophic</span> in impact — this dial sets how <em>often</em>, not how bad. Raising it describes a worse, rarer state, so the probability falls. Whether a given rate is tolerable is judged in the <a href="#tolerability-context">Tolerability context</a> below.</span></span>
           <span class="metric-value" id="exceed-val">0.99</span>
         </div>
         <div class="metric-row">
@@ -843,11 +944,13 @@ footer a { color: var(--teal); text-decoration: none; border-bottom: 1px dotted 
         <p class="tau-gloss" id="tau-gloss"></p>
         <p class="metric-note">The probability shown for the chosen threshold reflects
         uncertainty in the model's estimate: it is the chance the true annual
-        compromise <em>rate</em> is above that level &mdash; not the chance that a
-        compromise occurs. A smaller probability at a higher threshold means the
-        outcome is <em>rarer and more severe</em>, not that the system is safer; to
-        compare architectures, weigh the whole curve, not one point on it.</p>
+        compromise <em>rate</em> is at least that level &mdash; not the chance that a
+        compromise occurs. A smaller probability at a higher threshold means the model
+        judges that worse state &mdash; a higher rate, meaning compromise <em>more often</em>
+        &mdash; to be rarer, not that the system is safer; to compare architectures, weigh
+        the whole curve, not one point on it.</p>
       </div>
+
 
       <!-- Robustness -->
       <div class="robustness">
@@ -863,12 +966,137 @@ footer a { color: var(--teal); text-decoration: none; border-bottom: 1px dotted 
   </div>
 </div>
 
+<!-- ===================== TOLERABILITY (full width) ===================== -->
+<div class="tol-fullwidth">
+      <!-- Tolerability context -->
+      <div class="metric-block" id="tolerability-context">
+        <div class="metric-header">Tolerability context — safety-regulator benchmarks</div>
+        <p class="tol-intro">Every field that quantifies catastrophic risk &mdash; life-safety<sup class="note-ref"><a href="#note-1">1</a></sup>, nuclear,
+        aviation, financial tail risk &mdash; shares one principle: a single event that harms many people
+        must be made rarer the more people it harms. The shaded bands apply that principle at the scale you
+        set, calibrated to the only published anchor for it (HSE's societal F&#8209;N criterion: slope
+        &minus;1 through 50 deaths at 1-in-5,000/year)<sup class="note-ref"><a href="#note-2">2</a></sup>. We make <em>no claim that a compromise is equivalent
+        to a death</em><sup class="note-ref"><a href="#note-3">3</a></sup>: the bands treat one person's compromise as <em>no worse than</em> one fatality
+        purely as an upper bound, and the figure shows how far beneath that you can discount before the
+        verdict changes. Switch the consequence basis below to <em>economic loss</em> for the same comparison
+        with no fatalities in the frame.</p>
+        <div class="tol-control">
+          <span>Consequence basis:</span>
+          <label class="tol-radio"><input type="radio" name="tolmode" value="people" checked> people affected</label>
+          <label class="tol-radio"><input type="radio" name="tolmode" value="econ"> economic loss<sup class="note-ref"><a href="#note-8">8</a></sup></label>
+        </div>
+        <div class="tol-control" id="ctrl-people">
+          <span>People affected by one compromise:</span>
+          <input type="number" id="pop-input" class="tau-input" value="1000000" min="50" max="100000000" step="1000" aria-label="people affected by a single compromise">
+        </div>
+        <div class="tol-control" id="ctrl-econ" style="display:none">
+          <span>Loss given one compromise (&pound;):</span>
+          <input type="number" id="loss-input" class="tau-input" value="12000000000" min="1000000" step="1000000" aria-label="monetary loss given one compromise, pounds">
+        </div>
+        <div id="tol-svg-wrap"><svg id="tol-svg" viewBox="0 0 1040 380" role="img" aria-label="Annual compromise probability against safety tolerability thresholds"></svg></div>
+        <div class="tol-legend" id="tol-legend"></div>
+        <p class="tol-headline" id="pop-readout"></p>
+        <p class="metric-note">The criterion is denominated in fatalities; here N is read as
+        <em>people seriously affected</em>, and values beyond N=1,000 extrapolate past HSE's
+        truncation<sup class="note-ref"><a href="#note-2">2</a></sup>. The aviation marker (catastrophic &#8804; 10<sup>&#8722;9</sup>) is per
+        flight-hour, a different exposure base<sup class="note-ref"><a href="#note-4">4</a></sup>. The bands describe society's tolerance for an
+        N&#8209;fatality event; the comparison does not assert that a compromise is a death. And the
+        harm is not merely &ldquo;privacy&rdquo;: a stolen access capability is a single point of mass
+        compromise with economic, national-security and &mdash; for journalists, dissidents and abuse
+        victims &mdash; physical-safety consequences, so a one-dimensional reading understates it.<sup class="note-ref"><a href="#note-6">6</a></sup></p>
+        <p class="metric-note tol-achieved"><strong>Has any system ever achieved these levels?</strong>
+        No deployed system handling comparable key material has demonstrated a compromise rate near even
+        the intolerable boundary. The most safety-critical engineering aims at 10<sup>&#8722;7</sup>&ndash;10<sup>&#8722;9</sup>/yr,
+        but those figures are established by analysis, not observation: they sit below what testing can
+        confirm, and where the record <em>can</em> be checked &mdash; civil nuclear &mdash; the observed
+        core-damage rate (~3 events in ~14,000 reactor-years, &asymp; 8&times;10<sup>&#8722;4</sup>/yr) runs
+        about an order of magnitude <em>above</em> its own design target<sup class="note-ref"><a href="#note-5">5</a></sup>. Observed compromise rates for
+        high-value key infrastructure are ~10<sup>&#8722;2</sup>/yr &mdash; the model's own empirical input<sup class="note-ref"><a href="#note-7">7</a></sup>
+        &mdash; so the tolerability threshold has never been approached, let alone met.</p>
+        <p class="metric-note tol-achieved"><strong>What &ldquo;compromise&rdquo; means here.</strong>
+        The modelled consequence is not a partial breach of a few fields but <em>total exposure</em> of a
+        user&rsquo;s communications &mdash; the capability a stolen access mechanism actually confers. The nearest
+        real-world analogues are total-device spyware such as Pegasus and full-archive leaks such as the 2015
+        Ashley Madison breach, whose documented harms run from indefinite extortion and ruin to, for those most
+        at risk, detention, violence and death.<sup class="note-ref"><a href="#note-9">9</a></sup> Read against
+        that, the loss figures above are a floor, not a ceiling.</p>
+      </div>
+</div>
+
 <!-- ============================ SENSITIVITY ============================ -->
 <div class="sensitivity">
   <h2>Sensitivity</h2>
   <p class="sensitivity-intro">How the FH upper bound and Bayesian 95th percentile of the annual compromise rate respond when individual answers are toggled, holding all others fixed at your current specification.</p>
   <div class="sens-grid" id="sens-grid"></div>
 </div>
+
+<section class="notes" id="notes">
+  <h2>Notes &amp; sources</h2>
+  <p class="note" id="note-1"><sup>1</sup> <strong>HSE individual-risk tolerability.</strong>
+  HSE, <em>Reducing Risks, Protecting People</em> (R2P2, 2001), developing the 1992 <em>Tolerability of
+  Risk from Nuclear Power Stations</em>: three regions — unacceptable, tolerable only if ALARP, broadly
+  acceptable. Risk of death per year is judged intolerable above 1&times;10<sup>&#8722;3</sup> for workers
+  and 1&times;10<sup>&#8722;4</sup> for the public, and broadly acceptable below 1&times;10<sup>&#8722;6</sup>.
+  (HSE SPC/Permissioning/37, &ldquo;Guidance on ALARP Decisions in COMAH&rdquo;.)</p>
+
+  <p class="note" id="note-2"><sup>2</sup> <strong>HSE societal F&#8209;N criterion — and the limit of this
+  chart's use of it.</strong> R2P2 (&sect;136) gives a single societal anchor: an event killing 50 or more
+  people is intolerable if its frequency exceeds 1-in-5,000 per year, placed on an F&#8209;N line of slope
+  &minus;1 and <em>truncated at N=1,000</em>. This chart applies that line at far larger N. <em>HSE does not
+  endorse the criterion beyond its N=1,000 truncation</em>, so the bands at population scale are an
+  illustrative extrapolation, not an HSE-sanctioned threshold; treat them as order-of-magnitude.</p>
+
+  <p class="note" id="note-3"><sup>3</sup> <strong>No equivalence between a compromise and a death.</strong>
+  The bands treat one person's compromise as <em>no worse than</em> one fatality purely as an upper bound;
+  no moral equivalence is asserted. The break-even shown is g* = (intolerable frequency) &divide; (model
+  median): the per-person gravity at which the median just reaches the intolerable line. The conclusion holds
+  for any valuation graver than g*, so it does not depend on the exchange rate between privacy loss and life.
+  The harm of a mass compromise is in any case multidimensional — economic, national-security and, for
+  at-risk groups, physical — so a purely &ldquo;privacy&rdquo; reading understates it.</p>
+
+  <p class="note" id="note-4"><sup>4</sup> <strong>Civil aviation.</strong> CS&#8209;25.1309 / FAA
+  AC&nbsp;25.1309&#8209;1B: catastrophic failure conditions must be &ldquo;extremely improbable&rdquo;,
+  &#8804; ~1&times;10<sup>&#8722;9</sup> per flight-hour, apportioned from a ~1&times;10<sup>&#8722;7</sup>
+  per-flight-hour aircraft-level target across ~100 conditions. This is a <em>per-flight-hour</em> basis, not
+  an annual rate, and the 10<sup>&#8722;9</sup> figure is established by analysis and redundancy, not by
+  observation. Shown only as a reference marker.</p>
+
+  <p class="note" id="note-5"><sup>5</sup> <strong>Civil nuclear: target vs record.</strong> Design
+  core-damage-frequency targets are ~10<sup>&#8722;4</sup>&ndash;10<sup>&#8722;5</sup> per reactor-year.
+  The empirical record — roughly three severe core-damage events (Three Mile Island, Chernobyl, Fukushima)
+  in ~14,000 reactor-years, ≈ 7.6&times;10<sup>&#8722;4</sup> per reactor-year — runs about an order of
+  magnitude <em>above</em> target. (NRDC 2011 reactor-year tally; HSE/EC core-damage-frequency reviews.)</p>
+
+  <p class="note" id="note-6"><sup>6</sup> <strong>Exposure bases are not strictly commensurable.</strong>
+  The model's τ is an annual rate; the National Risk Register measures over 2 years (malicious) or 5 years
+  (non-malicious); aviation uses per-flight-hour. Cross-domain comparisons here are order-of-magnitude, not
+  like-for-like, and the &ldquo;people affected&rdquo; N is itself an assumption set by the reader.</p>
+
+  <p class="note" id="note-7"><sup>7</sup> <strong>Model outputs.</strong> The median, interval and tail are
+  the paper's calibration-conditional values; this tool is a structured interpolation of that model, not a
+  re-derivation. The ~10<sup>&#8722;2</sup>/yr empirical compromise rate cited is the paper's own evidence
+  pillar.</p>
+
+  <p class="note" id="note-8"><sup>8</sup> <strong>Economic basis &mdash; value of preventing a fatality.</strong>
+  The economic toggle converts the loss given compromise (L) into fatality-equivalents, L &divide; VPF, and applies
+  the same societal F&#8209;N criterion. VPF is HM Treasury's value of preventing a fatality, ~&pound;2m (about
+  &pound;1.96m in 2018 prices, indexed to GDP per head; HM Treasury <em>Green Book</em> and DfT TAG Data Book),
+  used across the DfT, HSE and Office for Nuclear Regulation. This is the standard regulatory cost-benefit
+  bridge, so it removes fatalities from the picture only in presentation &mdash; the calibration still derives
+  from the fatality criterion. VPF is a willingness-to-pay construct and is itself contested (e.g. Thomas &amp;
+  Vaughan, 2015, argue its evidential base is weak). The default loss (&pound;12bn) is illustrative; set it to
+  the paper's L<sub>comp</sub> as preferred.</p>
+  <p class="note" id="note-9"><sup>9</sup> <strong>Total exposure &mdash; real-world analogues.</strong>
+  A compromised access mechanism confers total access to a user's communications, comparable to NSO Group's
+  Pegasus spyware, which grants an operator a device's messages, photos, contacts, camera, microphone and
+  location. Human-rights investigators have documented people being detained, tortured and, in some cases,
+  killed after such targeting &mdash; including associates of journalist Jamal Khashoggi, whose phones were
+  targeted around his 2018 killing. The public-dump analogue is the 2015 Ashley Madison breach (~32 million
+  users; names, private messages and intimate data exposed), which fuelled years of extortion and sextortion
+  and was linked to at least two suicides. These illustrate that the harm of total exposure is open-ended and
+  only partly monetisable, so per-record breach costs understate it. Sources: Human Rights Watch; Amnesty
+  International / Forbidden Stories (Pegasus Project); Citizen Lab; KrebsOnSecurity.</p>
+</section>
 
 <footer>
   <p>Quantitative outputs are calibrated to the framework's headline values; this tool is a structured interpolation of the underlying model, not a re-derivation. Structural findings (architectural ordering, tail-shape direction) are invariant under the answer set; calibration-conditional magnitudes scale with the modifier aggregate.</p>
@@ -1118,6 +1346,191 @@ function buildAnnotations(p, a, tau) {
    RENDER
    ============================================================ */
 
+/* ============================================================
+   TOLERABILITY-CONTEXT FIGURE
+   Plots the model's annual compromise probability on a log axis
+   against HSE individual-risk regions and the HSE societal F-N
+   intolerable frequency for a single event harming N people.
+   ============================================================ */
+function tolSup(k) {
+  const map = { '-': '\u207B', '0': '\u2070', '1': '\u00B9', '2': '\u00B2',
+    '3': '\u00B3', '4': '\u2074', '5': '\u2075', '6': '\u2076',
+    '7': '\u2077', '8': '\u2078', '9': '\u2079' };
+  return '10' + String(k).split('').map(c => map[c] || c).join('');
+}
+function fmtPop(n) {
+  if (n >= 1e9) return (n / 1e9).toFixed(n % 1e9 ? 1 : 0) + 'bn';
+  if (n >= 1e6) return (n / 1e6).toFixed(n % 1e6 ? 1 : 0) + 'M';
+  if (n >= 1e3) return (n / 1e3).toFixed(n % 1e3 ? 1 : 0) + 'k';
+  return String(Math.round(n));
+}
+function fmtMoney(n) {
+  if (n >= 1e9) return (n / 1e9).toFixed(n % 1e9 ? 1 : 0) + 'bn';
+  if (n >= 1e6) return (n / 1e6).toFixed(n % 1e6 ? 1 : 0) + 'm';
+  if (n >= 1e3) return Math.round(n / 1e3) + 'k';
+  return String(Math.round(n));
+}
+// Plain-words count (no scientific notation), e.g. 100000000 -> "100 million"
+function fmtBig(n) {
+  n = Math.round(n);
+  const trim = function (x) { return (x % 1 === 0) ? String(x) : x.toFixed(1); };
+  if (n >= 1e12) return trim(n / 1e12) + ' trillion';
+  if (n >= 1e9)  return trim(n / 1e9)  + ' billion';
+  if (n >= 1e6)  return trim(n / 1e6)  + ' million';
+  return n.toLocaleString('en-GB');
+}
+// A per-year frequency expressed as "1 in N per year" rather than 1e-8/yr
+function fmtOneIn(v) {
+  if (!isFinite(v) || v <= 0) return '\u2014';
+  return '1 in ' + fmtBig(1 / v) + '/yr';
+}
+function renderTolerability(p) {
+  const svg = document.getElementById('tol-svg');
+  if (!svg) return;
+  const H = 380, x0 = 44, plotW = 956, yTop = 92, yBot = 300;
+  const LOGMIN = -12, LOGMAX = 0;
+  const X = function (prob) {
+    let lp = Math.log10(prob);
+    lp = Math.max(LOGMIN, Math.min(LOGMAX, lp));
+    return x0 + (lp - LOGMIN) / (LOGMAX - LOGMIN) * plotW;
+  };
+  // consequence basis: people affected (fatality upper bound) OR economic loss via HM Treasury VPF
+  const VPF = 2.0e6;               // HM Treasury value of preventing a fatality (~£2m, GDP-indexed)
+  const modeEl = document.querySelector('input[name="tolmode"]:checked');
+  const mode = modeEl ? modeEl.value : 'people';
+  const ctrlP = document.getElementById('ctrl-people');
+  const ctrlE = document.getElementById('ctrl-econ');
+  if (ctrlP) ctrlP.style.display = (mode === 'econ') ? 'none' : '';
+  if (ctrlE) ctrlE.style.display = (mode === 'econ') ? '' : 'none';
+  let N, lossL = 0;
+  if (mode === 'econ') {
+    lossL = parseFloat(document.getElementById('loss-input').value);
+    if (isNaN(lossL) || lossL < 1e6) lossL = 1e6;
+    N = lossL / VPF;               // fatality-equivalents implied by the monetary loss
+  } else {
+    N = parseFloat(document.getElementById('pop-input').value);
+    if (isNaN(N) || N < 50) N = 50;
+  }
+  const fnFreq = 0.01 / N;                 // slope -1 through (N=50, F=2e-4/yr)
+  const med = p.median / 100, clo = p.ci[0] / 100, chi = p.ci[1] / 100;
+
+  let s = '';
+  // societal F-N tolerability bands at the chosen N (slope -1 through 50 deaths at 1/5000/yr)
+  const Facc = 1e-4 / N;            // broadly-acceptable boundary (2 orders below intolerable)
+  const Fint = fnFreq;              // intolerable boundary = 0.01 / N
+  const clampx = function (v) { return Math.max(x0, Math.min(x0 + plotW, v)); };
+
+  // title
+  s += `<text class="tol-svg-title" x="${x0}" y="36">Annual probability of compromise vs. societal tolerability</text>`;
+
+  // tolerability bands
+  s += `<rect x="${clampx(X(1e-12))}" y="${yTop}" width="${clampx(X(Facc)) - clampx(X(1e-12))}" height="${yBot - yTop}" fill="rgba(94,107,59,0.18)"/>`;
+  s += `<rect x="${clampx(X(Facc))}" y="${yTop}" width="${clampx(X(Fint)) - clampx(X(Facc))}" height="${yBot - yTop}" fill="rgba(184,114,42,0.18)"/>`;
+  s += `<rect x="${clampx(X(Fint))}" y="${yTop}" width="${clampx(X(1e0)) - clampx(X(Fint))}" height="${yBot - yTop}" fill="rgba(139,30,63,0.17)"/>`;
+
+  // boundary lines (drop a little below the axis so the join reads clearly)
+  s += `<line x1="${X(Facc)}" y1="${yTop}" x2="${X(Facc)}" y2="${yBot + 8}" stroke="#5e6b3b" stroke-width="1.5"/>`;
+  s += `<line x1="${X(Fint)}" y1="${yTop}" x2="${X(Fint)}" y2="${yBot + 8}" stroke="#8b1e3f" stroke-width="1.75"/>`;
+
+  // in-plot region labels: only the wide intolerable band (others go to the HTML legend)
+  s += `<text class="tol-svg-reglabel" fill="#8b1e3f" text-anchor="middle" x="${(clampx(X(Fint)) + clampx(X(1e0))) / 2}" y="${yTop - 16}">Intolerable</text>`;
+  if (clampx(X(Fint)) - clampx(X(Facc)) > 90)
+    s += `<text class="tol-svg-reglabel" fill="#b8722a" text-anchor="middle" font-size="13" x="${(clampx(X(Facc)) + clampx(X(Fint))) / 2}" y="${yTop - 16}">ALARP</text>`;
+
+  // decade ticks: minor every decade, labelled major every 2 decades
+  for (let k = LOGMIN; k <= LOGMAX; k++) {
+    const xx = X(Math.pow(10, k));
+    const major = (k % 2 === 0);
+    s += `<line class="tol-svg-tick" x1="${xx}" y1="${yBot}" x2="${xx}" y2="${yBot + (major ? 9 : 5)}"/>`;
+    if (major) s += `<text class="tol-svg-ticklabel" text-anchor="middle" x="${xx}" y="${yBot + 28}">${tolSup(k)}</text>`;
+  }
+  s += `<text class="tol-svg-pct" text-anchor="middle" x="${X(1e-2)}" y="${yBot + 46}">(=1%)</text>`;
+  s += `<text class="tol-svg-pct" text-anchor="middle" x="${X(1e-1)}" y="${yBot + 46}">(=10%)</text>`;
+  s += `<line class="tol-svg-axis" x1="${x0}" y1="${yBot}" x2="${x0 + plotW}" y2="${yBot}"/>`;
+  s += `<text class="tol-svg-axistitle" text-anchor="middle" x="${x0 + plotW / 2}" y="${H - 12}">annual probability of a catastrophic compromise (log scale) \u2014 rarer \u2190 \u2192 more likely</text>`;
+
+  // aviation catastrophic reference (different basis — faint dashed; named in legend)
+  const avX = X(1e-9);
+  s += `<line class="tol-svg-refline" x1="${avX}" y1="${yTop}" x2="${avX}" y2="${yBot}" stroke="#9a8f7a" stroke-dasharray="2 3"/>`;
+
+  // threshold marker: the rate being queried in the tail-risk panel, P(rate >= tau).
+  // A confidence probe on the same axis as the bands; deliberately subordinate to
+  // the posterior (short, dotted, teal) so it cannot be misread as "the rate".
+  const tauEl = document.getElementById('tau-input');
+  let tauPct = tauEl ? parseFloat(tauEl.value) : NaN;
+  if (!isNaN(tauPct)) {
+    tauPct = Math.min(20, Math.max(0.1, tauPct));
+    const tx = X(tauPct / 100);
+    const tauTop = yTop + (yBot - yTop) * 0.55;
+    s += `<line x1="${tx}" y1="${yBot}" x2="${tx}" y2="${tauTop}" stroke="#1e4d5c" stroke-width="1.5" stroke-dasharray="1.5 4"/>`;
+    s += `<path d="M ${tx - 6} ${yBot} L ${tx + 6} ${yBot} L ${tx} ${yBot - 10} Z" fill="#1e4d5c"/>`;
+    const exV = (typeof exceedanceAt === 'function') ? exceedanceAt(p.exceedAnchors, tauPct) : null;
+    const mxL = X(med);
+    let lblAnchor = (tx < mxL) ? 'end' : 'start';     // sit away from the posterior median
+    if (lblAnchor === 'start' && tx > x0 + plotW * 0.78) lblAnchor = 'end';
+    if (lblAnchor === 'end' && tx < x0 + plotW * 0.22) lblAnchor = 'start';
+    const lblX = (lblAnchor === 'end') ? tx - 7 : tx + 7;
+    const lab = (exV === null) ? `\u03C4 = ${tauPct}%`
+                               : `\u03C4 = ${tauPct}%  \u00B7  P\u2265\u03C4 = ${exV.toFixed(2)}`;
+    s += `<text class="tol-svg-tau" text-anchor="${lblAnchor}" x="${lblX}" y="${tauTop - 6}">${lab}</text>`;
+  }
+
+  // posterior band + median
+  const bx0 = X(clo), bx1 = X(chi), mx = X(med);
+  s += `<rect class="tol-svg-post-band" x="${Math.min(bx0, bx1)}" y="${yTop}" width="${Math.max(2, Math.abs(bx1 - bx0))}" height="${yBot - yTop}"/>`;
+  s += `<line class="tol-svg-post-line" x1="${mx}" y1="${yTop}" x2="${mx}" y2="${yBot}"/>`;
+  s += `<circle cx="${mx}" cy="${yTop}" r="5" fill="#8b1e3f"/>`;
+
+  // posterior callout box near the top of the plot, kept inside the canvas
+  const calloutText = `model: ${p.median.toFixed(1)}% (90% ${p.ci[0].toFixed(1)}\u2013${p.ci[1].toFixed(1)}%)`;
+  const cw = calloutText.length * 8.0 + 22;
+  let cxLeft = mx - cw / 2, anchor = 'middle', cx = mx;
+  if (cxLeft < x0 + 2) { cxLeft = x0 + 2; anchor = 'start'; cx = cxLeft + 11; }
+  if (cxLeft + cw > x0 + plotW - 2) { cxLeft = x0 + plotW - 2 - cw; anchor = 'end'; cx = cxLeft + cw - 11; }
+  const cyTop = yTop + 16;
+  s += `<rect x="${cxLeft}" y="${cyTop}" width="${cw}" height="28" rx="4" fill="#f6f1e8" fill-opacity="0.92" stroke="#8b1e3f" stroke-width="1"/>`;
+  s += `<line x1="${mx}" y1="${yTop}" x2="${mx}" y2="${cyTop}" stroke="#8b1e3f" stroke-width="1"/>`;
+  s += `<text class="tol-svg-post-label" text-anchor="${anchor}" x="${cx}" y="${cyTop + 19}">${calloutText}</text>`;
+
+  svg.innerHTML = s;
+
+  // HTML legend (clearer than rotated in-plot labels); thresholds shown live
+  const leg = document.getElementById('tol-legend');
+  if (leg) {
+    const fmtF = function (v) { return fmtOneIn(v); };
+    leg.innerHTML =
+      '<span class="tol-chip"><i style="background:rgba(94,107,59,0.45)"></i>Broadly acceptable (&lt; ' + fmtF(Facc) + ')</span>' +
+      '<span class="tol-chip"><i style="background:rgba(184,114,42,0.5)"></i>Tolerable if ALARP</span>' +
+      '<span class="tol-chip"><i style="background:rgba(139,30,63,0.45)"></i>Intolerable (&gt; ' + fmtF(Fint) + ')</span>' +
+      '<span class="tol-chip"><i class="post"></i>Model estimate (median \u0026 90% interval)</span>' +
+      '<span class="tol-chip"><i class="avi"></i>Aviation catastrophic target (1 in 1 billion flight-hours, different basis)</span>' +
+      '<span class="tol-chip"><i class="tau"></i>Threshold being queried (\u03C4) \u2014 P(rate \u2265 \u03C4) is the figure in the panel above</span>';
+  }
+
+  // readout: how far the model sits above the societal-tolerable rate
+  const ro = document.getElementById('pop-readout');
+  if (ro) {
+    if (mode === 'econ') {
+      const Lstar = 0.01 * VPF / med;           // loss at which the median meets the intolerable line
+      const ratio = lossL / Lstar;              // = factor the modelled loss exceeds the break-even
+      ro.innerHTML = '<strong>No fatalities in this frame.</strong> Converting the loss through HM Treasury\u2019s ' +
+        '\u00A3' + fmtMoney(VPF) + ' value of preventing a fatality<sup class="note-ref"><a href="#note-8">8</a></sup>, the intolerable boundary for a ' +
+        '\u00A3' + fmtMoney(lossL) + ' event is about ' + fmtOneIn(fnFreq) + '. The model median (' +
+        (med * 100).toFixed(1) + '%/yr) only falls to it if the loss per compromise is below ~\u00A3' + fmtMoney(Lstar) +
+        '; the modelled loss is about ' + fmtBig(ratio) + '\u00D7 higher, so the verdict is unchanged with no death in the picture.';
+    } else {
+      const gStar = fnFreq / med;               // fatality-equivalent per person at the intolerable line
+      const perDeath = 1 / gStar;               // compromises per fatality-equivalent
+      ro.innerHTML = '<strong>No equivalence assumed.</strong> The intolerable boundary for ' + fmtPop(N) +
+        ' people is about ' + fmtOneIn(fnFreq) + '. The model median (' + (med * 100).toFixed(1) +
+        '%/yr) only reaches it if one person\u2019s compromise is valued at less than one death per ' +
+        fmtBig(perDeath) + ' compromises. At any graver valuation the risk stays intolerable, so the ' +
+        'conclusion does not rest on equating privacy with life.';
+    }
+  }
+}
+
+
 function render() {
   const a = getAnswers();
   const p = computeProfile(a);
@@ -1167,6 +1580,7 @@ function render() {
   let tau = parseFloat(tauEl.value);
   if (isNaN(tau)) tau = 1.0;
   tau = Math.min(20, Math.max(0.1, tau));
+
   const exVal = exceedanceAt(p.exceedAnchors, tau);
   document.getElementById('exceed-val').textContent =
     (exVal === null ? '—' : exVal.toFixed(2));
@@ -1184,16 +1598,16 @@ function render() {
                                        : pctChance.toFixed(1) + '%';
       let where;
       if (exVal >= 0.5)      where = 'You are near the middle of the estimate, where such rates are common.';
-      else if (exVal >= 0.1) where = 'You are now in the worse part of the estimate, where such rates are less common.';
+      else if (exVal >= 0.1) where = 'You are in the worse part of the estimate, where such rates are less common.';
       else                   where = 'You are deep in the pessimistic tail, where such rates are rare.';
       glossEl.innerHTML =
         '<strong>Reading:</strong> the model puts about a ' + chanceTxt +
         ' chance that the system\u2019s true annual compromise rate is at least ' +
-        tau.toFixed(1) + '%. Raising this figure asks whether the system is ' +
-        '<em>worse still</em> &mdash; a more damaging, more pessimistic state &mdash; ' +
-        'which is rarer, so the probability falls. ' + where +
-        ' A smaller number here means you are looking further into the bad tail, ' +
-        '<em>not</em> that the architecture is safer.';
+        tau.toFixed(1) + '%. Raising this figure describes a system compromised ' +
+        '<em>more often</em> &mdash; a worse state &mdash; which the model judges rarer, ' +
+        'so the probability falls. ' + where +
+        ' But every compromise is <em>catastrophic in impact</em>: a smaller number ' +
+        'here means a rarer, graver situation, not a safe one.';
     }
   }
   const gpdEl = document.getElementById('gpd-xi');
@@ -1226,6 +1640,7 @@ function render() {
   }
 
   // Sensitivity
+  renderTolerability(p);
   renderSensitivity(a, p);
 }
 
@@ -1302,6 +1717,27 @@ tauInput.addEventListener('change', () => {
   tauInput.value = Math.min(20, Math.max(0.1, v));
   render();
 });
+
+const popInput = document.getElementById('pop-input');
+if (popInput) popInput.addEventListener('input', render);
+const lossInput = document.getElementById('loss-input');
+if (lossInput) lossInput.addEventListener('input', render);
+document.querySelectorAll('input[name="tolmode"]').forEach(el => el.addEventListener('change', render));
+
+// Brief highlight when the consequence basis (toggle or value) changes, so the
+// figure's shifting bands, the live legend thresholds, and the readout are noticed.
+function flashTol() {
+  ['tol-svg-wrap', 'tol-legend', 'pop-readout'].forEach(function (id) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.classList.remove('tol-flash');
+    void el.offsetWidth;            // force reflow so the animation restarts
+    el.classList.add('tol-flash');
+  });
+}
+if (popInput) popInput.addEventListener('change', flashTol);
+if (lossInput) lossInput.addEventListener('change', flashTol);
+document.querySelectorAll('input[name="tolmode"]').forEach(el => el.addEventListener('change', flashTol));
 
 render();
 </script>
