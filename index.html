@@ -423,6 +423,30 @@ h1 em {
 
 .metric-note em { font-style: normal; font-weight: 600; }
 
+/* Directional hint sitting under the threshold control */
+.tau-dir {
+  display: block;
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  color: var(--amber);
+  margin-top: 3px;
+}
+
+/* Live plain-English reading of the exceedance threshold */
+.tau-gloss {
+  font-size: 12px;
+  line-height: 1.55;
+  color: var(--ink-soft);
+  margin-top: 11px;
+  padding: 9px 11px;
+  background: rgba(30, 77, 92, 0.05);
+  border-left: 2px solid var(--teal);
+  border-radius: 2px;
+}
+.tau-gloss strong { color: var(--teal-deep); font-weight: 600; }
+.tau-gloss em { font-style: normal; font-weight: 600; color: var(--ink); }
+
 .range-bar {
   height: 6px;
   background: var(--paper-shade);
@@ -809,17 +833,20 @@ footer a { color: var(--teal); text-decoration: none; border-bottom: 1px dotted 
           <span class="metric-value" id="tail-99">35.2%</span>
         </div>
         <div class="metric-row" title="The model's probability that the true annual compromise rate is above the chosen threshold — not the probability that a compromise occurs.">
-          <span class="metric-label">Probability the annual compromise rate exceeds <input type="number" id="tau-input" class="tau-input" value="1.0" min="0.1" max="20" step="0.1" aria-label="annual compromise rate threshold, percent">%</span>
+          <span class="metric-label">Probability the true annual compromise rate is at least <input type="number" id="tau-input" class="tau-input" value="1.0" min="0.1" max="20" step="0.1" aria-label="annual compromise rate threshold, percent">%<span class="tau-dir">Raise this % to ask about a worse, rarer state — the probability will fall.</span></span>
           <span class="metric-value" id="exceed-val">0.99</span>
         </div>
         <div class="metric-row">
           <span class="metric-label">GPD tail-shape ξ</span>
           <span class="metric-value" id="gpd-xi">0.27 (95% CI 0.19–0.36)</span>
         </div>
+        <p class="tau-gloss" id="tau-gloss"></p>
         <p class="metric-note">The probability shown for the chosen threshold reflects
         uncertainty in the model's estimate: it is the chance the true annual
         compromise <em>rate</em> is above that level &mdash; not the chance that a
-        compromise occurs.</p>
+        compromise occurs. A smaller probability at a higher threshold means the
+        outcome is <em>rarer and more severe</em>, not that the system is safer; to
+        compare architectures, weigh the whole curve, not one point on it.</p>
       </div>
 
       <!-- Robustness -->
@@ -1143,6 +1170,32 @@ function render() {
   const exVal = exceedanceAt(p.exceedAnchors, tau);
   document.getElementById('exceed-val').textContent =
     (exVal === null ? '—' : exVal.toFixed(2));
+
+  // Live plain-English reading of the threshold, to forestall the
+  // "rarer therefore safer" misreading.
+  const glossEl = document.getElementById('tau-gloss');
+  if (glossEl) {
+    if (exVal === null) {
+      glossEl.innerHTML = 'For this illustrative scheme the exceedance curve ' +
+        'is not calibrated, so no probability is shown here.';
+    } else {
+      const pctChance = exVal * 100;
+      const chanceTxt = pctChance >= 1 ? Math.round(pctChance) + '%'
+                                       : pctChance.toFixed(1) + '%';
+      let where;
+      if (exVal >= 0.5)      where = 'You are near the middle of the estimate, where such rates are common.';
+      else if (exVal >= 0.1) where = 'You are now in the worse part of the estimate, where such rates are less common.';
+      else                   where = 'You are deep in the pessimistic tail, where such rates are rare.';
+      glossEl.innerHTML =
+        '<strong>Reading:</strong> the model puts about a ' + chanceTxt +
+        ' chance that the system\u2019s true annual compromise rate is at least ' +
+        tau.toFixed(1) + '%. Raising this figure asks whether the system is ' +
+        '<em>worse still</em> &mdash; a more damaging, more pessimistic state &mdash; ' +
+        'which is rarer, so the probability falls. ' + where +
+        ' A smaller number here means you are looking further into the bad tail, ' +
+        '<em>not</em> that the architecture is safer.';
+    }
+  }
   const gpdEl = document.getElementById('gpd-xi');
   if (p.gpdXi === null || p.gpdXi === undefined) {
     gpdEl.textContent = 'n/a — bounded binomial tail';
